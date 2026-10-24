@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="kobi-preview-release" content="v19-offline-touch">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kobi">
+  <meta name="theme-color" content="#000000">
+  <meta name="kobi-preview-release" content="v20-display-modes">
       <meta name="kobi-preview-baseline" content="v14-html-dbff9cf0; restored-v13-main-7ae917c01a0047c2d102ae609d42d1334ebf0f82">
   <title>Kobi · 随身陪伴</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src blob:; font-src data:; connect-src https://geocoding-api.open-meteo.com https://api.open-meteo.com; base-uri 'none'; form-action 'none'">
@@ -270,8 +274,8 @@
 
 
 /* Preview integration: reference component geometry is unchanged. */
-body{overflow:auto;min-height:100dvh;padding:20px 12px;gap:12px}
-.screen{isolation:isolate}.pet-area{position:absolute;left:146px;top:0;width:375px;height:375px;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;transition:left .32s ease-in-out,top .32s ease-in-out,width .32s ease-in-out,height .32s ease-in-out}
+body{overflow:auto;min-height:100vh;min-height:100dvh;padding:20px 12px;gap:12px}
+.screen{isolation:isolate}.pet-area{position:absolute;left:146px;top:0;width:375px;height:375px;display:flex;align-items:center;justify-content:center;touch-action:pinch-zoom;user-select:none;transition:left .32s ease-in-out,top .32s ease-in-out,width .32s ease-in-out,height .32s ease-in-out}
 .screen.docked .pet-area{left:0;top:57.435px;width:260.13px;height:260.13px}.pet-area svg{width:100%;height:100%;overflow:visible}.pet-area:focus-visible{outline:1px dotted #555;outline-offset:-30px}
 #cameraGate{z-index:2;position:absolute;left:12px;right:12px;top:75px;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-size:11px;color:#777;background:#000}
 #cameraGate div{display:flex;gap:22px}#cameraGate button{height:36px;color:#ccc}
@@ -369,7 +373,7 @@ body{padding:0;gap:0;justify-content:center}button,input,textarea{-webkit-tap-hi
 #menuToggle{top:8px;right:16px;color:#bbb}#menuToggle svg{width:24px;height:24px}
 .screen.docked .pet-area{top:56px;left:0;width:260px;height:260px}
 #petCaption{position:absolute;left:20px;top:312px;width:220px;text-align:center;font-size:10px;letter-spacing:2px;color:#777;pointer-events:none}
-.plugin{top:62px;height:259px;touch-action:pan-y}.pref-row{height:44px}.pref-options{grid-auto-rows:44px}.pref-back{width:44px;height:44px}.pref-picker-head{height:44px}.pref-options{height:174px}.solid-button{height:40px}.todo-delete{width:44px;height:40px}.todo-row{min-height:44px}#todoAdd{height:40px;width:44px;top:214px}#todoIn{font-size:16px;height:40px;top:214px;width:290px}#dateNote,#serviceInput{font-size:16px}.service-actions button{min-height:44px}#albumAdd{height:36px}
+.plugin{top:62px;height:259px;touch-action:pan-y pinch-zoom}.pref-row{height:44px}.pref-options{grid-auto-rows:44px}.pref-back{width:44px;height:44px}.pref-picker-head{height:44px}.pref-options{height:174px}.solid-button{height:40px}.todo-delete{width:44px;height:40px}.todo-row{min-height:44px}#todoAdd{height:40px;width:44px;top:214px}#todoIn{font-size:16px;height:40px;top:214px;width:290px}#dateNote,#serviceInput{font-size:16px}.service-actions button{min-height:44px}#albumAdd{height:36px}
 #menuWheel{top:46px;height:276px}#menuWheel .wheel-item{font-size:23px}
 #screenNotice{position:absolute;left:278px;right:18px;bottom:5px;z-index:50;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.6;color:#ddd;pointer-events:none}
 .preview-notes{position:fixed;inset:0;z-index:100;width:100%;max-width:none;padding:28px max(24px,calc((100vw - 720px)/2));background:#0b0b0b;color:#aaa;overflow:auto;-webkit-overflow-scrolling:touch;font-size:13px;line-height:1.8}
@@ -472,11 +476,24 @@ FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
 
 -->
-</head>
+<style>
+/* v20 display-only changes: internal scrollers remain native. */
+html,body{overscroll-behavior:none}
+body{position:fixed;inset:0;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.preview{position:absolute}
+*,*::before,*::after{scrollbar-width:none!important;-ms-overflow-style:none!important}
+*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+#todoPanel,.album-grid,.pref-list,.pref-options,.preview-notes,.extra-body,.camera-filter-options{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+html.kobi-only .phone,html.kobi-only .screen{width:var(--kobi-stage-width,100vw);height:var(--kobi-stage-height,100vh)}
+html.kobi-only #ambientHeader,html.kobi-only #menuToggle,html.kobi-only #plugin,html.kobi-only #menuWheel,html.kobi-only #petCaption,html.kobi-only #screenNotice{display:none!important}
+html.kobi-only .screen .pet-area{left:50%;top:50%;width:var(--kobi-size,90vmin);height:var(--kobi-size,90vmin);transform:translate(-50%,-50%);transition:none}
+#onlyHint{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:60;text-align:center;font:11px/1.6 var(--ui);color:#888;pointer-events:none}
+html.kobi-only .pet-area:focus-visible{outline:1px dotted #777;outline-offset:-12px}
+</style></head>
 <body>
   <main class="preview" aria-label="Kobi 插件">
     <div class="phone">
-      <div class="screen docked" id="screen"><header id="ambientHeader"><button id="aboutKobi" aria-label="使用说明">K O B I <span>· 19</span></button><time id="ambientDate"></time></header><span id="petCaption">在这里，陪着你。</span><div id="screenNotice" role="status" aria-live="polite" hidden></div>
+      <div class="screen docked" id="screen"><header id="ambientHeader"><button id="aboutKobi" aria-label="使用说明">K O B I <span>· 20</span></button><time id="ambientDate"></time></header><span id="petCaption">在这里，陪着你。</span><div id="screenNotice" role="status" aria-live="polite" hidden></div>
         <button id="menuToggle" aria-label="展开功能菜单" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button><div id="menuWheel" aria-label="功能菜单" hidden><div id="wheelItems"></div></div><div class="pet-area" id="petArea" role="button" tabindex="0" aria-label="Kobi，轻触、双击、长按或抚摸"><svg id="petSVG" viewBox="-158 -158 316 316" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div>
         <div class="plugin" id="plugin">
           <svg id="w" viewBox="0 0 377.53 259" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -488,7 +505,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     </div>
   </main>
   
-  <section class="preview-notes" aria-label="预览说明" role="dialog" aria-modal="true" hidden><button id="closeNotes" aria-label="关闭说明">关闭</button><h2>Kobi / 使用说明</h2><details id="candidateReleaseMetadata"><summary>候选版本与验证</summary><p id="candidateReleaseNotice">v19 · 为 667 × 375 横屏改进。原有组件、相册与滤镜保留；单文件可离线使用。此 HTML 与原生应用独立，不需要企业签名。未在实体 iPhone 6s 上验证。浏览器、文件预览器及系统权限的限制仍然存在。</p></details><div class="preview-controls"><button id="resetView">启动页面</button><button id="companionView">只看 Kobi</button><button id="useLiveWeather">启用联网天气</button><button id="useDemoWeather">离线天气示例</button><button id="referencePhotoDemo">CC0 参考照片</button><button id="downloadLastPhoto" disabled>下载上次拍摄</button></div><p>667 × 375 逻辑屏幕。组件取自你提供的 HTML；Kobi 保留完整形状、自然睁眼和触摸反馈。页面切换 320 ms。</p><p>天气默认是附件中的离线示例；联网须主动允许向 Open-Meteo 发送所选城市。HTML 相机采用“开启相机 → 允许浏览器权限 → 点击快门”的手动流程。页面隐藏会停止相机和倒计时，返回后须重新开启；授权完成不会自动拍照。原生首次授权后的已确认拍照流程由 iOS 另行处理，本网页不能复现或验证其系统权限界面与前后台回调。演示照片会标注 DEMO；浏览器仅保存静态 PNG，不支持原生实况照片；已嵌入 18 款授权 LUT 和 1 款 Gold 200 / Endura 胶片模型；浏览器 LUT 色彩仍为近似预览。</p><p>专注计时、待办、到期提醒、便笺与偏好保存在本浏览器；相册使用 IndexedDB 保存。后台计时会在返回时校正，网页不保证后台通知。保存失败会提示，原记录保留。</p><p>日历默认显示节日。节气收录 2025–2027 年（© NAOJ），官方放假调休仅收录 2026 年；农历依赖浏览器 Intl 中国历，未知年份和不支持的浏览器会提示。节日名称不等于当天放假。</p><p>答案之书是本地随机娱乐；对话是预设演示，无 AI 服务、麦克风或密钥。此预览不代表 iPhone 性能或 iOS 系统服务验证。</p><details><summary>参考照片</summary><p>“CC0 参考照片”由你主动打开，仅用于滤镜比较，不是真实相机、不拍照或自动保存。Rachel Michetti，Pikolo Espresso Bar；600 × 400 原始 PNG 以 CC0 提供，按 sRGB 解释，中心裁切到 4:3。<a href="https://scikit-image.org/docs/stable/api/skimage.data#skimage.data.coffee" target="_blank" rel="noopener">scikit-image 来源与许可</a></p></details><p id="wakeLockStatus" role="status" aria-live="polite">保持亮屏：关闭。</p><button id="retryWakeLock" hidden>重试浏览器保持亮屏</button><div id="previewNotice" role="status" aria-live="polite"></div><details><summary>键盘与浏览器说明</summary><p>菜单支持滚轮、拖动、上下键与回车；Esc 返回。选择器支持方向键。使用安全来源或本地文件时，真实相机与持久存储仍受浏览器权限限制。照片导入、下载、删除由你主动操作；删除有二次确认。这里没有自动上传数据。</p></details><details><summary>动画许可</summary><pre>Copyright (c) 2026 Jérémy Perret
+  <section class="preview-notes" aria-label="预览说明" role="dialog" aria-modal="true" hidden><button id="closeNotes" aria-label="关闭说明">关闭</button><h2>Kobi / 使用说明</h2><details id="candidateReleaseMetadata"><summary>候选版本与验证</summary><p id="candidateReleaseNotice">v20 · 全屏适配、隐藏滚动条与只看 Kobi 模式。为 667 × 375 横屏改进。原有组件、相册与滤镜保留；单文件可离线使用。此 HTML 与原生应用独立，不需要企业签名。未在实体 iPhone 6s 上验证。浏览器、文件预览器及系统权限的限制仍然存在。</p></details><div class="preview-controls"><button id="resetView">启动页面</button><button id="companionView">只看 Kobi</button><button id="fullscreenView">全屏显示</button><button id="useLiveWeather">启用联网天气</button><button id="useDemoWeather">离线天气示例</button><button id="referencePhotoDemo">CC0 参考照片</button><button id="downloadLastPhoto" disabled>下载上次拍摄</button></div><p>只看 Kobi 会记住选择；双击或长按 Kobi、按 Esc 可返回组件。全屏按钮仅在浏览器支持时隐藏浏览器界面；iPhone Safari 请通过分享菜单「添加到主屏幕」再打开，网页无法强制收起 Safari 地址栏。</p><p>667 × 375 逻辑屏幕。组件取自你提供的 HTML；Kobi 保留完整形状、自然睁眼和触摸反馈。页面切换 320 ms。</p><p>天气默认是附件中的离线示例；联网须主动允许向 Open-Meteo 发送所选城市。HTML 相机采用“开启相机 → 允许浏览器权限 → 点击快门”的手动流程。页面隐藏会停止相机和倒计时，返回后须重新开启；授权完成不会自动拍照。原生首次授权后的已确认拍照流程由 iOS 另行处理，本网页不能复现或验证其系统权限界面与前后台回调。演示照片会标注 DEMO；浏览器仅保存静态 PNG，不支持原生实况照片；已嵌入 18 款授权 LUT 和 1 款 Gold 200 / Endura 胶片模型；浏览器 LUT 色彩仍为近似预览。</p><p>专注计时、待办、到期提醒、便笺与偏好保存在本浏览器；相册使用 IndexedDB 保存。后台计时会在返回时校正，网页不保证后台通知。保存失败会提示，原记录保留。</p><p>日历默认显示节日。节气收录 2025–2027 年（© NAOJ），官方放假调休仅收录 2026 年；农历依赖浏览器 Intl 中国历，未知年份和不支持的浏览器会提示。节日名称不等于当天放假。</p><p>答案之书是本地随机娱乐；对话是预设演示，无 AI 服务、麦克风或密钥。此预览不代表 iPhone 性能或 iOS 系统服务验证。</p><details><summary>参考照片</summary><p>“CC0 参考照片”由你主动打开，仅用于滤镜比较，不是真实相机、不拍照或自动保存。Rachel Michetti，Pikolo Espresso Bar；600 × 400 原始 PNG 以 CC0 提供，按 sRGB 解释，中心裁切到 4:3。<a href="https://scikit-image.org/docs/stable/api/skimage.data#skimage.data.coffee" target="_blank" rel="noopener">scikit-image 来源与许可</a></p></details><p id="wakeLockStatus" role="status" aria-live="polite">保持亮屏：关闭。</p><button id="retryWakeLock" hidden>重试浏览器保持亮屏</button><div id="previewNotice" role="status" aria-live="polite"></div><details><summary>键盘与浏览器说明</summary><p>菜单支持滚轮、拖动、上下键与回车；Esc 返回。选择器支持方向键。使用安全来源或本地文件时，真实相机与持久存储仍受浏览器权限限制。照片导入、下载、删除由你主动操作；删除有二次确认。这里没有自动上传数据。</p></details><details><summary>动画许可</summary><pre>Copyright (c) 2026 Jérémy Perret
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1854,7 +1871,7 @@ function resumeActivityExpression(){normalExpression=activity==='idle'?'neutre':
 function lifeExpression(){return 'neutre';}
 function resetLife(){faithful=false;normalShape=window.__kobiComponents?.snapshot().prefs.shape||'cercle';normalExpression='neutre';engine.setShape(SHAPE_BY_ID.get(normalShape).radii,clock);engine.setExpression(EXPRESSION_BY_ID.get('neutre'),clock);resumeActivityExpression();}
 function selectShape(id){if(!SHAPE_BY_ID.has(id))return false;normalShape=id;engine.setShape(SHAPE_BY_ID.get(id).radii,clock);return true;}
-function interact(event){if(faithful)return;const expression=event==='doubleTap'?'surpris':event==='longPress'?'timide':['listen','think','pickup','shake','surprised','drag'].includes(event)?'attentif':'curieux';normalExpression=expression;engine.setExpression(EXPRESSION_BY_ID.get(expression),clock);if(engine.state!=='idle')engine.setState('idle',clock);emotionUntil=clock+(expression==='curieux'?.9:1.5);returnAt=emotionUntil;}
+function interact(event){if(faithful)return;const expression=event==='doubleTap'?'surpris':event==='longPress'?'timide':['listen','think','pickup','shake','surprised','drag'].includes(event)?'attentif':'curieux';normalExpression=expression;engine.setExpression(EXPRESSION_BY_ID.get(expression),clock);if(engine.state!=='idle')engine.setState('idle',clock);emotionUntil=clock+(expression==='curieux'?.9:1.5);returnAt=emotionUntil;if(window.__kobiDisplay?.isOnly()&&['doubleTap','longPress'].includes(event))setTimeout(()=>window.__kobiDisplay.exit(),0);}
 function gazeAt(x,y,tracking=true){if(faithful||!Number.isFinite(x+y))return;companionLife.look(x,y,tracking);}
 function trackGaze(x,y){if(faithful||!Number.isFinite(x+y))return;companionLife.follow(x,y);}
 function releaseGaze(cancelled=false){companionLife.release(cancelled);}
@@ -2455,7 +2472,7 @@ renderPet();queueAnimation();
       if(p==='menu') { document.getElementById('plugin').style.visibility='hidden'; document.getElementById('menuWheel').hidden=false; wheelIndex=Math.max(0,PAGES.findIndex(p=>p[0]===prevPage)); drawWheel(); }
     }
     function go(p) {
-      if(!['menu','companion',...PAGES.map(x=>x[0])].includes(p)||p===page)return;window.__kobi?.cancelGesture();wheelGesture=null;wheelMoved=false;document.activeElement?.blur?.();pageAnimation?.cancel();cancelPolish();cancelWeather();
+      if(window.__kobiDisplay?.isOnly()&&p!=='companion'&&!window.__kobiDisplay.isExiting())return;if(!['menu','companion',...PAGES.map(x=>x[0])].includes(p)||p===page)return;window.__kobi?.cancelGesture();wheelGesture=null;wheelMoved=false;document.activeElement?.blur?.();pageAnimation?.cancel();cancelPolish();cancelWeather();
       leave(page);
       if (p === 'menu') prevPage = page;
       page=p;pageEpoch++;window.__kobi?.dock(p==='companion'?null:p);document.getElementById('plugin').hidden=p==='companion';
@@ -2733,7 +2750,7 @@ renderPet();queueAnimation();
           const arrow=document.createElement('span');arrow.className='pref-arrow';arrow.textContent='›';arrow.setAttribute('aria-hidden','true');row.append(label,value,arrow);
           row.onclick=()=>{settingsScroll=list.scrollTop;settingsPicker=def.key;render();};list.append(row);
         });
-        for(const [label,action] of [['日历资料与范围',()=>openExtraSettings('calendarSources')],['只看 Kobi',()=>go('companion')],['对话与服务',()=>openExtraSettings('services')],['语音对话',()=>openExtraSettings('chat')],['到期提醒管理',()=>openExtraSettings('reminders')]]){const row=document.createElement('button');row.className='pref-row';row.textContent=label;row.onclick=action;list.append(row);}
+        for(const [label,action] of [['日历资料与范围',()=>openExtraSettings('calendarSources')],['只看 Kobi',()=>go('companion')],['全屏显示',()=>window.__kobiDisplay?.toggleFullscreen()],['对话与服务',()=>openExtraSettings('services')],['语音对话',()=>openExtraSettings('chat')],['到期提醒管理',()=>openExtraSettings('reminders')]]){const row=document.createElement('button');row.className='pref-row';row.textContent=label;row.onclick=action;list.append(row);}
         settingsEl.append(list);list.scrollTop=settingsScroll;
         if(settingsNotice){const notice=document.createElement('div');notice.className='pref-notice';notice.textContent=settingsNotice;settingsEl.append(notice);}
       }
@@ -3371,20 +3388,29 @@ const COFFEE_REFERENCE_DATA="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAA
     // 只缩放整台手机，不改变屏幕内部的布局比例。
     let layoutWidth=innerWidth,layoutHeight=innerHeight;
     function fitPhone() {
-      const visual=window.visualViewport,useVisual=visual&&(visual.scale||1)<=1,vw=useVisual?visual.width:innerWidth,vh=useVisual?visual.height:innerHeight;
+      const visual=window.visualViewport,useVisual=visual&&(visual.scale||1)<=1;
+      // Do not refit while pinch-zooming: browser zoom and panning remain native.
+      if(visual&&visual.scale>1.01)return;
+      const vw=useVisual?visual.width:innerWidth,vh=useVisual?visual.height:innerHeight;
+      const css=getComputedStyle(document.body),safeL=parseFloat(css.paddingLeft)||0,safeR=parseFloat(css.paddingRight)||0,safeT=parseFloat(css.paddingTop)||0,safeB=parseFloat(css.paddingBottom)||0;
+      const aw=Math.max(1,vw-safeL-safeR),ah=Math.max(1,vh-safeT-safeB);
       const editing=!!document.activeElement&&/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
       if(!editing||Math.abs(innerWidth-layoutWidth)>40){layoutWidth=innerWidth;layoutHeight=innerHeight;}
       const orientationPortrait=typeof window.orientation==='number'?Math.abs(window.orientation)%180===0:layoutHeight>layoutWidth;
-      const portrait=layoutWidth<540&&orientationPortrait, width=portrait?390:667,height=portrait?700:375;
+      const portrait=layoutWidth<540&&orientationPortrait,only=document.documentElement.classList.contains('kobi-only');
+      const width=only?aw:portrait?390:667,height=only?ah:portrait?700:375;
       document.documentElement.classList.toggle('portrait',portrait);
       const keyboard=editing&&vh<layoutHeight*.8;
-      const scale=Math.max(.1,Math.min(vw/width,(keyboard?layoutHeight:vh)/height,1.6));
+      const scale=only?1:Math.max(.1,Math.min(aw/width,(keyboard?layoutHeight-safeT-safeB:ah)/height,1.6));
       const preview=document.querySelector('.preview');preview.style.width=(width*scale)+'px';preview.style.height=(height*scale)+'px';preview.style.transform='';
+      preview.style.left=(safeL+(aw-width*scale)/2)+'px';preview.style.top=(safeT+Math.max(0,(ah-height*scale)/2))+'px';
+      document.documentElement.style.setProperty('--kobi-stage-width',aw+'px');document.documentElement.style.setProperty('--kobi-stage-height',ah+'px');document.documentElement.style.setProperty('--kobi-size',Math.min(aw,ah)*.92+'px');
       document.querySelector('.phone').style.transform='scale('+scale+')';
       if(keyboard)requestAnimationFrame(()=>{if(!document.activeElement||!/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName))return;const r=document.activeElement.getBoundingClientRect(),available=vh+(visual?visual.offsetTop:0);preview.style.transform='translateY('+Math.min(0,available-r.bottom-16)+'px)';});
     }
+    window.addEventListener('kobi-display',fitPhone);window.addEventListener('orientationchange',()=>setTimeout(fitPhone,200));
     document.addEventListener('focusin',()=>setTimeout(fitPhone,80));document.addEventListener('focusout',()=>setTimeout(fitPhone,160));
-    addEventListener('resize',fitPhone);window.visualViewport?.addEventListener('resize',fitPhone);
+    addEventListener('resize',fitPhone);window.visualViewport?.addEventListener('resize',fitPhone);window.visualViewport?.addEventListener('scroll',fitPhone);
     fitPhone();
     document.fonts?.ready.then(()=>render());
     svg.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ') && e.target.hasAttribute('data-act')){e.preventDefault();e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
@@ -3397,7 +3423,7 @@ function sync(){const p=api.snapshot().page;$('petCaption').hidden=p==='companio
 window.addEventListener('kobi-page',sync);sync();
 function date(){if(document.hidden)return;const d=new Date(),pad=n=>String(n).padStart(2,'0');$('ambientDate').textContent=pad(d.getMonth()+1)+' / '+pad(d.getDate())+'  '+['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];$('ambientDate').dateTime=d.toISOString();}date();setInterval(date,30000);document.addEventListener('visibilitychange',date);
 const notes=document.querySelector('.preview-notes');let priorFocus=null;
-function closeNotes(){notes.hidden=true;if(priorFocus)priorFocus.focus();}
+function closeNotes(){notes.hidden=true;if(priorFocus&&priorFocus.getClientRects().length)priorFocus.focus();}
 $('aboutKobi').onclick=()=>{priorFocus=document.activeElement;notes.hidden=false;$('closeNotes').focus();};$('closeNotes').onclick=closeNotes;['resetView','companionView','referencePhotoDemo'].forEach(id=>$(id).addEventListener('click',closeNotes));
 notes.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeNotes();}if(e.key==='Tab'){const els=Array.from(notes.querySelectorAll('button,summary,a,input')).filter(x=>x.getClientRects().length&&!x.disabled),first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 let noticeTimer=0;const status=$('liveStatus');new MutationObserver(()=>{const t=status.textContent;if(!t)return;$('screenNotice').textContent=t;$('screenNotice').hidden=false;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('screenNotice').hidden=true,4200);}).observe(status,{childList:true,characterData:true,subtree:true});
@@ -3409,5 +3435,60 @@ deck.addEventListener('pointercancel',()=>swipe=null);
 // Local settings only; not a system fullscreen/brightness request.
 window.__kobiV19={version:'19',layout:()=>document.documentElement.classList.contains('portrait')?'portrait':'landscape',offlineCore:true};
 })();
-</script></body>
+</script><script>
+/* v20: isolated presentation preferences; no changes to component data. */
+(()=>{'use strict';
+const root=document.documentElement,api=window.__kobiComponents,pet=document.getElementById('petArea');
+if(!api||!pet)return;
+const key='kobi.display.v20';let only=false,exiting=false,previous='settings',hintTimer=0;
+let saved={only:false,hintSeen:false},storageReadable=true;
+try{const raw=localStorage.getItem(key);if(raw!==null){const parsed=JSON.parse(raw);if(!parsed||typeof parsed.only!=='boolean')throw Error('invalid display preference');saved={only:parsed.only,hintSeen:parsed.hintSeen===true};}}catch(e){storageReadable=false;}
+function persist(){if(!storageReadable)return;try{localStorage.setItem(key,JSON.stringify(saved));}catch(e){/* This session remains usable even when storage is unavailable. */}}
+const hint=document.createElement('div');hint.id='onlyHint';hint.hidden=true;hint.textContent='双击或长按 Kobi 返回';document.body.append(hint);
+const help=document.createElement('span');help.id='onlyHelp';help.className='sr-only';help.textContent='只看 Kobi。双击或长按 Kobi，或按 Escape 返回组件；也可使用返回组件按钮。';help.hidden=true;document.body.append(help);
+const exitButton=document.createElement('button');exitButton.id='exitKobiOnly';exitButton.className='sr-only';exitButton.textContent='返回组件';exitButton.hidden=true;document.body.append(exitButton);
+const style=document.createElement('style');style.textContent='#exitKobiOnly:focus{clip-path:none;width:auto;height:44px;left:50%;bottom:12px;transform:translateX(-50%);position:fixed;z-index:80;padding:0 18px;background:#151515;color:#bbb;border:1px solid #444;border-radius:6px}';document.head.append(style);
+function showOnly(){
+ if(only)return;only=true;root.classList.add('kobi-only');document.querySelector('.preview-notes').hidden=true;
+ saved.only=true;help.hidden=false;exitButton.hidden=false;pet.setAttribute('aria-describedby','onlyHelp');
+ window.dispatchEvent(new Event('kobi-display'));pet.focus({preventScroll:true});
+ if(!saved.hintSeen){hint.hidden=false;hintTimer=setTimeout(()=>hint.hidden=true,6000);saved.hintSeen=true;}
+ persist();
+}
+function exit(){
+ if(!only)return;only=false;exiting=true;root.classList.remove('kobi-only');saved.only=false;persist();
+ clearTimeout(hintTimer);hint.hidden=true;help.hidden=true;exitButton.hidden=true;pet.removeAttribute('aria-describedby');
+ api.go(previous==='companion'||previous==='menu'?'settings':previous);exiting=false;
+ window.dispatchEvent(new Event('kobi-display'));document.getElementById('menuToggle').focus({preventScroll:true});
+}
+exitButton.onclick=exit;
+document.addEventListener('keydown',e=>{if(only&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();exit();}},true);
+window.addEventListener('kobi-page',()=>{const page=api.snapshot().page;if(page==='companion')showOnly();else if(!only&&page!=='menu')previous=page;});
+let fullscreenPending=false;
+function fullscreenNotice(message){document.getElementById('liveStatus').textContent=message;document.getElementById('previewNotice').textContent=message;}
+async function toggleFullscreen(){
+ if(fullscreenPending)return;
+ const element=document.fullscreenElement||document.webkitFullscreenElement;
+ const standalone=window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches;
+ if(!element&&standalone){fullscreenNotice('已在主屏幕独立窗口中显示；系统状态栏由 iOS 管理。');return;}
+ const request=root.requestFullscreen||root.webkitRequestFullscreen;
+ const leave=document.exitFullscreen||document.webkitExitFullscreen;
+ if(!element&&!request){fullscreenNotice('此浏览器不支持网页全屏。iPhone Safari：分享 → 添加到主屏幕，再从图标打开；系统状态栏可能保留。');return;}
+ fullscreenPending=true;
+ try{if(element){if(leave)await leave.call(document);}else await request.call(root);}
+ catch(e){fullscreenNotice('浏览器未允许全屏。iPhone Safari 可通过分享 → 添加到主屏幕，再从图标打开。');}
+ finally{fullscreenPending=false;window.dispatchEvent(new Event('kobi-display'));}
+}
+function fullscreenChanged(){window.dispatchEvent(new Event('kobi-display'));const button=document.getElementById('fullscreenView');button.textContent=(document.fullscreenElement||document.webkitFullscreenElement)?'退出全屏':'全屏显示';}
+document.addEventListener('fullscreenchange',fullscreenChanged);document.addEventListener('webkitfullscreenchange',fullscreenChanged);
+document.getElementById('fullscreenView').onclick=toggleFullscreen;
+window.__kobiDisplay={isOnly:()=>only,isExiting:()=>exiting,exit,toggleFullscreen,enter:()=>api.go('companion'),version:'20'};
+previous=api.snapshot().page;
+if(saved.only)api.go('companion');
+// Same-origin embedded documents, if added later, can hide scrollbars without disabling scrolling.
+function hideFrameBars(frame){try{const doc=frame.contentDocument;if(!doc||doc.getElementById('kobi-scrollbar-style'))return;const css=doc.createElement('style');css.id='kobi-scrollbar-style';css.textContent='*{scrollbar-width:none!important}*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}';doc.head?.append(css);}catch(e){/* Cross-origin content remains under its own control. */}}
+document.querySelectorAll('iframe').forEach(frame=>{hideFrameBars(frame);frame.addEventListener('load',()=>hideFrameBars(frame));});
+})();
+</script>
+</body>
 </html>
